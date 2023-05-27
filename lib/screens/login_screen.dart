@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc_authentication_tutorial/bloc/login_bloc.dart';
 import 'package:flutter_bloc_authentication_tutorial/screens/register_screen.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,6 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<LoginBloc>(context, listen: false);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -34,29 +37,42 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: 'Enter User Name',
-                    labelText: 'User Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
+                StreamBuilder(
+                  stream: bloc.loginEmail,
+                  builder: (context, AsyncSnapshot<String> snapshot) {
+                    return TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Email',
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                      onChanged: (value) => bloc.changeLoginEmail,
+                    );
+                  }
                 ),
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Password',
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
+                StreamBuilder<String>(
+                  stream: bloc.loginPassword,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      keyboardType: TextInputType.emailAddress,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Password',
+                        labelText: 'Password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        
+                      ),
+                      onChanged: (value) => bloc.changeLoginPassword,
+                    );
+                  }
                 ),
                 const SizedBox(
                   height: 30,

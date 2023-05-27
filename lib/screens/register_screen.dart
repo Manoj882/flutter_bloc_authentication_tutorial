@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc_authentication_tutorial/bloc/register_bloc.dart';
 import 'package:flutter_bloc_authentication_tutorial/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,8 +13,12 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool isVisible = true;
+
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<RegisterBloc>(context, listen: false);
     return Scaffold(
       body: Form(
         key: _formKey,
@@ -34,70 +40,104 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Name',
-                    labelText: 'Name',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: bloc.name,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Name',
+                          labelText: 'Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: (value) => bloc.changeName,
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Email',
-                    labelText: 'Email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: bloc.email,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Email',
+                          labelText: 'Email',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: (value) => bloc.changeEmail,
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Phone Number',
-                    labelText: 'Phone Number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: bloc.phoneNumber,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        keyboardType: TextInputType.phone,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Phone Number',
+                          labelText: 'Phone Number',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: (value) => bloc.changePhoneNumber,
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Password',
-                    labelText: 'Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: bloc.password,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        keyboardType: TextInputType.emailAddress,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Password',
+                          labelText: 'Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        onChanged: (value) => bloc.changePassword,
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    hintText: 'Enter Confirm Password',
-                    labelText: 'Confirm Password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
+                StreamBuilder(
+                    stream: bloc.confirmPassword,
+                    builder: (context, snapshot) {
+                      return TextField(
+                        keyboardType: TextInputType.emailAddress,
+                        obscureText: isVisible,
+                        decoration: InputDecoration(
+                          hintText: 'Enter Confirm Password',
+                          labelText: 'Confirm Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: isVisible ? Icon(Icons.visibility) : Icon(Icons.visibility_off),
+                            onPressed: (){
+                              setState(() {
+                                isVisible = !isVisible;
+                              });
+
+                            },
+                          ),
+                        ),
+                        onChanged: (value) => bloc.changeConfirmPassword,
+                      );
+                    }),
                 const SizedBox(
                   height: 30,
                 ),
